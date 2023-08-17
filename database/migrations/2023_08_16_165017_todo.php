@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->dateTime('created_at');
-            $table->foreignId('created_by')->nullable()->references('id')->on('users')->onDelete('set null');
+            $table->foreignId('created_by_id')->nullable()->references('id')->on('users')->onDelete('set null');
+            $table->foreignId('updated_by_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->foreignId('responsible_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->smallInteger('status');
             $table->timestamps();

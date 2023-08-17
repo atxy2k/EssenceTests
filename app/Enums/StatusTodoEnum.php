@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Enum : int
+enum StatusTodoEnum : int
 {
     case Waiting = 1;
     case Assigned = 2;
