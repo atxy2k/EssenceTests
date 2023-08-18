@@ -8,6 +8,7 @@ use App\Enums\StatusTodoEnum;
 use App\Models\Todo;
 use App\Throwable\TodoCouldNotBeCreatedException;
 use App\Throwable\TodoCouldNotBeUpdatedException;
+use App\Throwable\TodoNeedToBeInProgressException;
 use App\Throwable\TodoNotFoundException;
 use App\Throwable\ValidationException;
 use App\Validators\TodosValidator;
@@ -125,6 +126,8 @@ class TodosService extends Service implements TodosServiceInterface
         {
             DB::beginTransaction();
             $item = $this->todosRepository->find($id);
+            throw_if($item->status !== StatusTodoEnum::Assigned,
+                TodoNeedToBeInProgressException::class);
             throw_if(is_null($item), TodoNotFoundException::class);
             $item->update([
                 'updated_by_id' => Auth::id(),
@@ -148,6 +151,8 @@ class TodosService extends Service implements TodosServiceInterface
         {
             DB::beginTransaction();
             $item = $this->todosRepository->find($id);
+            throw_unless($item->status === StatusTodoEnum::InProgress,
+                TodoNeedToBeInProgressException::class);
             throw_if(is_null($item), TodoNotFoundException::class);
             $item->update([
                 'updated_by_id' => Auth::id(),
